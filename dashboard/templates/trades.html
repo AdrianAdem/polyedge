@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Trades{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-6">Trade History</h1>
+
+{% if trades %}
+<div class="bg-gray-800 rounded-lg overflow-hidden">
+    <table class="w-full text-sm">
+        <thead class="bg-gray-700">
+            <tr>
+                <th class="px-4 py-2 text-left">Time</th>
+                <th class="px-4 py-2 text-left">Market</th>
+                <th class="px-4 py-2 text-left">Side</th>
+                <th class="px-4 py-2 text-right">Size</th>
+                <th class="px-4 py-2 text-right">Entry</th>
+                <th class="px-4 py-2 text-right">Exit</th>
+                <th class="px-4 py-2 text-right">PnL</th>
+                <th class="px-4 py-2 text-left">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in trades %}
+            <tr class="border-t border-gray-700">
+                <td class="px-4 py-2 text-xs text-gray-400">{{ t.timestamp }}</td>
+                <td class="px-4 py-2">{{ t.market_question[:45] }}{% if t.market_question|length > 45 %}...{% endif %}</td>
+                <td class="px-4 py-2">{{ t.side }}</td>
+                <td class="px-4 py-2 text-right">${{ "%.2f"|format(t.size) }}</td>
+                <td class="px-4 py-2 text-right">${{ "%.2f"|format(t.entry_price) }}</td>
+                <td class="px-4 py-2 text-right">
+                    {% if t.exit_price is not none %}${{ "%.2f"|format(t.exit_price) }}{% else %}-{% endif %}
+                </td>
+                <td class="px-4 py-2 text-right {% if t.pnl is not none and t.pnl >= 0 %}text-emerald-400{% elif t.pnl is not none %}text-red-400{% endif %}">
+                    {% if t.pnl is not none %}${{ "%+.2f"|format(t.pnl) }}{% else %}-{% endif %}
+                </td>
+                <td class="px-4 py-2">
+                    <span class="text-xs px-2 py-0.5 rounded {% if t.status == 'open' %}bg-blue-900 text-blue-300{% else %}bg-gray-700{% endif %}">
+                        {{ t.status }}
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="text-gray-500 text-center py-12">No trades yet.</div>
+{% endif %}
+{% endblock %}

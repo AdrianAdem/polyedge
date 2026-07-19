@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PolyEdge - {% block title %}Dashboard{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen">
+    <nav class="bg-gray-800 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-8">
+            <span class="text-xl font-bold text-emerald-400">PolyEdge</span>
+            <a href="/" class="hover:text-emerald-400">Overview</a>
+            <a href="/signals" class="hover:text-emerald-400">Signals</a>
+            <a href="/trades" class="hover:text-emerald-400">Trades</a>
+            <a href="/costs" class="hover:text-emerald-400">Costs</a>
+        </div>
+    </nav>
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

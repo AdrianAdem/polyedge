@@ -1,0 +1,26 @@
+services:
+  bot:
+    build: .
+    env_file: .env
+    environment:
+      # Shared volume path so bot and dashboard read the same SQLite file
+      - DB_PATH=/app/db/polyedge.db
+    volumes:
+      - db-data:/app/db
+    restart: unless-stopped
+    command: python main.py
+
+  dashboard:
+    build: .
+    env_file: .env
+    environment:
+      - DB_PATH=/app/db/polyedge.db
+    ports:
+      - "8000:8000"
+    volumes:
+      - db-data:/app/db
+    restart: unless-stopped
+    command: uvicorn dashboard.app:app --host 0.0.0.0 --port 8000
+
+volumes:
+  db-data:

@@ -1,0 +1,32 @@
+[project]
+name = "polyedge"
+version = "0.1.0"
+description = "Event-driven signal scanner for Polymarket prediction markets"
+requires-python = ">=3.11"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+exclude = [".venv", "__pycache__"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+]
+ignore = [
+    "E501",  # line length handled by formatter
+    "B008",  # FastAPI dependency injection uses calls in defaults
+    "UP042", # str+Enum is deliberate: StrEnum changes str() output, which is persisted to SQLite
+]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

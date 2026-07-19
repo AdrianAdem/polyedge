@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}API Costs{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-6">API Cost Tracking</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+    <div class="bg-gray-800 rounded-lg p-4">
+        <div class="text-sm text-gray-400">Today's API Cost</div>
+        <div class="text-2xl font-bold">${{ "%.4f"|format(today_cost) }}</div>
+    </div>
+    <div class="bg-gray-800 rounded-lg p-4">
+        <div class="text-sm text-gray-400">30-Day Total</div>
+        {% set total_cost = daily_stats|sum(attribute='api_cost') %}
+        <div class="text-2xl font-bold">${{ "%.4f"|format(total_cost) }}</div>
+    </div>
+</div>
+
+{% if daily_stats %}
+<h2 class="text-xl font-semibold mb-3">Daily Breakdown</h2>
+<div class="bg-gray-800 rounded-lg overflow-hidden">
+    <table class="w-full text-sm">
+        <thead class="bg-gray-700">
+            <tr>
+                <th class="px-4 py-2 text-left">Date</th>
+                <th class="px-4 py-2 text-right">API Cost</th>
+                <th class="px-4 py-2 text-right">Trades</th>
+                <th class="px-4 py-2 text-right">PnL</th>
+                <th class="px-4 py-2 text-right">Cost / Trade</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in daily_stats %}
+            <tr class="border-t border-gray-700">
+                <td class="px-4 py-2">{{ s.date }}</td>
+                <td class="px-4 py-2 text-right">${{ "%.4f"|format(s.api_cost) }}</td>
+                <td class="px-4 py-2 text-right">{{ s.num_trades }}</td>
+                <td class="px-4 py-2 text-right {% if s.total_pnl >= 0 %}text-emerald-400{% else %}text-red-400{% endif %}">
+                    ${{ "%+.2f"|format(s.total_pnl) }}
+                </td>
+                <td class="px-4 py-2 text-right">
+                    {% if s.num_trades > 0 %}${{ "%.4f"|format(s.api_cost / s.num_trades) }}{% else %}-{% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock %}
