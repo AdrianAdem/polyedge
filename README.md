@@ -5,12 +5,10 @@
 ### An event-driven scanner that reads roughly 1,700 prediction markets cheaply, and pays for the expensive model only where it is warranted.
 
 <p>
-<img src="https://img.shields.io/github/actions/workflow/status/AdrianAdem/polyedge/ci.yml?style=for-the-badge&label=CI" alt="" height="30"/>
-<img src="https://img.shields.io/badge/license-MIT-0C1030?style=for-the-badge" alt="" height="30"/>
-<img src="https://img.shields.io/badge/python-3.11%2B-0C1030?style=for-the-badge&logo=python&logoColor=white" alt="" height="30"/>
-<img src="https://img.shields.io/badge/run%20cost-%243%E2%80%938%20%2F%20day-6C8BFF?style=for-the-badge" alt="" height="30"/>
-<img src="https://img.shields.io/badge/execution-paper%20only-0C1030?style=for-the-badge" alt="" height="30"/>
+<img src="https://img.shields.io/github/actions/workflow/status/AdrianAdem/polyedge/ci.yml?style=for-the-badge&label=CI&labelColor=161A2E&color=6C8BFF" alt=""/> <img src="https://img.shields.io/badge/license-MIT-6C8BFF?style=for-the-badge&labelColor=161A2E" alt=""/> <img src="https://img.shields.io/badge/python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white&labelColor=161A2E" alt=""/> <img src="https://img.shields.io/badge/run%20cost-%243%E2%80%938%20%2F%20day-6C8BFF?style=for-the-badge&labelColor=161A2E" alt=""/> <img src="https://img.shields.io/badge/execution-paper%20only-8FA0E8?style=for-the-badge&labelColor=161A2E" alt=""/>
 </p>
+
+<br>
 
 </div>
 
