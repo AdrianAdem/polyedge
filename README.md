@@ -1,10 +1,20 @@
-<img src="docs/hero.png" alt="polyedge — cheap pass first" width="100%"/>
+<div align="center">
 
-<p><img src="https://github.com/AdrianAdem/polyedge/actions/workflows/ci.yml/badge.svg" alt="" height="20"/> <img src="https://img.shields.io/badge/license-MIT-0C1030?style=flat-square" alt="" height="20"/> <img src="https://img.shields.io/badge/python-3.11+-0C1030?style=flat-square" alt="" height="20"/> <img src="https://img.shields.io/badge/execution-paper%20only-6C8BFF?style=flat-square" alt="" height="20"/></p>
+<img src="docs/hero.png" alt="polyedge — a cheap pass first, the expensive one only if it earns it" width="100%"/>
+
+### An event-driven scanner that reads roughly 1,700 prediction markets cheaply, and pays for the expensive model only where it is warranted.
+
+<p>
+<img src="https://img.shields.io/github/actions/workflow/status/AdrianAdem/polyedge/ci.yml?style=for-the-badge&label=CI" alt="" height="30"/>
+<img src="https://img.shields.io/badge/license-MIT-0C1030?style=for-the-badge" alt="" height="30"/>
+<img src="https://img.shields.io/badge/python-3.11%2B-0C1030?style=for-the-badge&logo=python&logoColor=white" alt="" height="30"/>
+<img src="https://img.shields.io/badge/run%20cost-%243%E2%80%938%20%2F%20day-6C8BFF?style=for-the-badge" alt="" height="30"/>
+<img src="https://img.shields.io/badge/execution-paper%20only-0C1030?style=for-the-badge" alt="" height="30"/>
+</p>
+
+</div>
 
 **Contents** &nbsp;·&nbsp; [The problem](#the-problem) &nbsp;·&nbsp; [Features](#features) &nbsp;·&nbsp; [Screenshots](#screenshots) &nbsp;·&nbsp; [Tech stack](#tech-stack) &nbsp;·&nbsp; [Architecture](#architecture) &nbsp;·&nbsp; [Installation](#installation) &nbsp;·&nbsp; [Usage](#usage) &nbsp;·&nbsp; [Project layout](#project-layout) &nbsp;·&nbsp; [Roadmap](#roadmap) &nbsp;·&nbsp; [Disclaimer](#disclaimer) &nbsp;·&nbsp; [License](#license)
-
-Event-driven signal scanner for Polymarket prediction markets, using a two-tier LLM pipeline to find mispriced contracts and alert via Telegram.
 
 ## The problem
 
