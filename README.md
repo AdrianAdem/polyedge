@@ -1,13 +1,10 @@
 <img src="docs/hero.png" alt="polyedge — cheap pass first" width="100%"/>
 
 <p><img src="https://github.com/AdrianAdem/polyedge/actions/workflows/ci.yml/badge.svg" alt="" height="20"/> <img src="https://img.shields.io/badge/license-MIT-0C1030?style=flat-square" alt="" height="20"/> <img src="https://img.shields.io/badge/python-3.11+-0C1030?style=flat-square" alt="" height="20"/> <img src="https://img.shields.io/badge/execution-paper%20only-6C8BFF?style=flat-square" alt="" height="20"/></p>
-Event-driven signal scanner for Polymarket prediction markets, using a two-tier LLM pipeline to find mispriced contracts and alert via Telegram.
 
-[![CI](https://github.com/AdrianAdem/polyedge/actions/workflows/ci.yml/badge.svg)](https://github.com/AdrianAdem/polyedge/actions/workflows/ci.yml)
-![Python](https://img.shields.io/badge/python-3.11%2B-blue)
-![Async](https://img.shields.io/badge/asyncio-native-4B8BBE)
-![Code style](https://img.shields.io/badge/code%20style-ruff-261230)
-![License](https://img.shields.io/badge/license-MIT-green)
+**Contents** &nbsp;·&nbsp; [The problem](#the-problem) &nbsp;·&nbsp; [Features](#features) &nbsp;·&nbsp; [Screenshots](#screenshots) &nbsp;·&nbsp; [Tech stack](#tech-stack) &nbsp;·&nbsp; [Architecture](#architecture) &nbsp;·&nbsp; [Installation](#installation) &nbsp;·&nbsp; [Usage](#usage) &nbsp;·&nbsp; [Project layout](#project-layout) &nbsp;·&nbsp; [Roadmap](#roadmap) &nbsp;·&nbsp; [Disclaimer](#disclaimer) &nbsp;·&nbsp; [License](#license)
+
+Event-driven signal scanner for Polymarket prediction markets, using a two-tier LLM pipeline to find mispriced contracts and alert via Telegram.
 
 ## The problem
 
@@ -27,6 +24,45 @@ The binding constraint is cost. A naive implementation calls an LLM once per mar
 - **Telegram control** — signal alerts plus `/status`, `/history`, `/pause`, `/resume`, `/costs`.
 - **Server-rendered dashboard** — FastAPI and Jinja2, no frontend framework: portfolio, signals, trade history, cost tracking.
 - **Fails closed** — malformed LLM responses and API errors resolve to "no signal", never to a trade on bad data.
+
+## Screenshots
+
+> Screenshots show paper-trading demo data, not a live track record.
+
+**Portfolio overview** — value, daily PnL, open positions and a seven-day breakdown.
+
+![Dashboard overview](docs/screenshots/dashboard-overview.png)
+
+**Signal feed** — each verdict with edge, confidence, the model's probability estimate, its reasoning and key factors. Markets the Tier 1 filter rejected appear without a verdict, so the filtering itself stays auditable.
+
+![Signal feed](docs/screenshots/signals.png)
+
+**Trade history** — entry, exit and settled PnL per position.
+
+![Trade history](docs/screenshots/trades.png)
+
+**API cost tracking** — spend per day and per trade, the metric the two-tier design exists to control.
+
+![API cost tracking](docs/screenshots/costs.png)
+
+**Telegram alert** — the format pushed on every approved signal:
+
+```
+🎯 SIGNAL: BUY_YES
+Market: "Will the Fed cut rates at the June 2026 meeting?"
+Current Price: $0.42 (42%)
+Edge: 16.0%
+Confidence: 0.82
+Score: 0.131
+Suggested Size: $13.50
+Key Factors:
+  - CPI 2.1% vs 2.4% consensus
+  - Two Fed governors dovish
+  - Bond market implies 65%
+
+Reasoning: CPI printed 2.1% against 2.4% consensus, and two governors
+shifted dovish this week. Bond futures moved before this market did.
+```
 
 ## Tech stack
 
@@ -158,45 +194,6 @@ scan_cycle_complete          markets_scanned=40 next_scan_seconds=300
 ```
 
 Telegram commands: `/status` (portfolio and open positions), `/history` (recent trades), `/pause` and `/resume` (halt scanning), `/costs` (today's API spend).
-
-## Screenshots
-
-> Screenshots show paper-trading demo data, not a live track record.
-
-**Portfolio overview** — value, daily PnL, open positions and a seven-day breakdown.
-
-![Dashboard overview](docs/screenshots/dashboard-overview.png)
-
-**Signal feed** — each verdict with edge, confidence, the model's probability estimate, its reasoning and key factors. Markets the Tier 1 filter rejected appear without a verdict, so the filtering itself stays auditable.
-
-![Signal feed](docs/screenshots/signals.png)
-
-**Trade history** — entry, exit and settled PnL per position.
-
-![Trade history](docs/screenshots/trades.png)
-
-**API cost tracking** — spend per day and per trade, the metric the two-tier design exists to control.
-
-![API cost tracking](docs/screenshots/costs.png)
-
-**Telegram alert** — the format pushed on every approved signal:
-
-```
-🎯 SIGNAL: BUY_YES
-Market: "Will the Fed cut rates at the June 2026 meeting?"
-Current Price: $0.42 (42%)
-Edge: 16.0%
-Confidence: 0.82
-Score: 0.131
-Suggested Size: $13.50
-Key Factors:
-  - CPI 2.1% vs 2.4% consensus
-  - Two Fed governors dovish
-  - Bond market implies 65%
-
-Reasoning: CPI printed 2.1% against 2.4% consensus, and two governors
-shifted dovish this week. Bond futures moved before this market did.
-```
 
 ## Project layout
 
