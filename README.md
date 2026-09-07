@@ -1,5 +1,6 @@
-# PolyEdge
+<img src="docs/hero.png" alt="polyedge — cheap pass first" width="100%"/>
 
+<p><img src="https://github.com/AdrianAdem/polyedge/actions/workflows/ci.yml/badge.svg" alt="" height="20"/> <img src="https://img.shields.io/badge/license-MIT-0B0B0D?style=flat-square" alt="" height="20"/> <img src="https://img.shields.io/badge/python-3.11+-0B0B0D?style=flat-square" alt="" height="20"/> <img src="https://img.shields.io/badge/execution-paper%20only-FF3D00?style=flat-square" alt="" height="20"/></p>
 Event-driven signal scanner for Polymarket prediction markets, using a two-tier LLM pipeline to find mispriced contracts and alert via Telegram.
 
 [![CI](https://github.com/AdrianAdem/polyedge/actions/workflows/ci.yml/badge.svg)](https://github.com/AdrianAdem/polyedge/actions/workflows/ci.yml)
