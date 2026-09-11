@@ -1,26 +1,34 @@
 <div align="center">
 
-<img src="docs/hero.png" alt="polyedge — a cheap pass first, the expensive one only if it earns it" width="100%"/>
-
-### An event-driven scanner that reads roughly 1,700 prediction markets cheaply, and pays for the expensive model only where it is warranted.
-
-<p>
-<img src="https://img.shields.io/github/actions/workflow/status/AdrianAdem/polyedge/ci.yml?style=for-the-badge&label=CI&labelColor=161A2E&color=6C8BFF" alt=""/> <img src="https://img.shields.io/badge/license-MIT-6C8BFF?style=for-the-badge&labelColor=161A2E" alt=""/> <img src="https://img.shields.io/badge/python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white&labelColor=161A2E" alt=""/> <img src="https://img.shields.io/badge/run%20cost-%243%E2%80%938%20%2F%20day-6C8BFF?style=for-the-badge&labelColor=161A2E" alt=""/> <img src="https://img.shields.io/badge/execution-paper%20only-8FA0E8?style=for-the-badge&labelColor=161A2E" alt=""/>
-</p>
+<img src="docs/hero-v2.png" alt="PolyEdge — Prediction-market research with a two-stage model pipeline and per-call cost tracking." width="100%"/>
 
 <br>
 
+### Prediction-market research with a two-stage model pipeline and per-call cost tracking.
+
+<br>
+
+<a href="#installation"><img src="https://img.shields.io/badge/Python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python: 3.11+"/></a> <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-54BBD2?style=for-the-badge" alt="License: MIT"/></a> <a href="#features"><img src="https://img.shields.io/badge/Execution-Paper-54BBD2?style=for-the-badge" alt="Execution: Paper"/></a> <a href="https://github.com/AdrianAdem/polyedge"><img src="https://img.shields.io/badge/Source-GitHub-737C88?style=for-the-badge&logo=github&logoColor=white" alt="Source: GitHub"/></a>
+
+<br><br>
+
+<a href="#screenshots">Screenshots</a> &nbsp; · &nbsp; <a href="#installation">Get started</a> &nbsp; · &nbsp; <a href="#license">License</a>
+
+<br><br>
+
 </div>
 
-**Contents** &nbsp;·&nbsp; [The problem](#the-problem) &nbsp;·&nbsp; [Features](#features) &nbsp;·&nbsp; [Screenshots](#screenshots) &nbsp;·&nbsp; [Tech stack](#tech-stack) &nbsp;·&nbsp; [Architecture](#architecture) &nbsp;·&nbsp; [Installation](#installation) &nbsp;·&nbsp; [Usage](#usage) &nbsp;·&nbsp; [Project layout](#project-layout) &nbsp;·&nbsp; [Roadmap](#roadmap) &nbsp;·&nbsp; [Disclaimer](#disclaimer) &nbsp;·&nbsp; [License](#license)
+<br>
 
 ## The problem
 
 Prediction markets price events continuously, but the news that moves those prices arrives faster than most participants re-evaluate their positions. A market on "Will the Fed cut rates in June?" may sit at $0.42 for hours after a CPI print that should have moved it. Spotting that gap manually means watching hundreds of markets and several news feeds at once.
 
-PolyEdge automates the watching. It scans open Polymarket contracts, correlates them with live news, macro releases and crypto price action, and asks an LLM to estimate the true probability. When that estimate diverges far enough from the market price — with enough confidence, and in a market liquid enough to trade — it sizes the position and pushes an alert.
+PolyEdge automates the watching. It scans open Polymarket contracts, correlates them with live news, macro releases and crypto price action, and asks an LLM to produce a probability estimate. When that estimate diverges far enough from the market price — with enough confidence, and in a market liquid enough to trade — it sizes the position and pushes an alert.
 
-The binding constraint is cost. A naive implementation calls an LLM once per market per scan, which at ~1,700 open markets on a 5-minute interval runs to hundreds of dollars a day. The two-tier design exists to solve that, and holds the running cost to roughly $3–8/day.
+The scan budget is explicit: by default, at most 40 candidates reach the first model per scan. Only relevant, urgent candidates advance to the second model. The market universe is larger than the analysis budget; API cost depends on scan frequency, model prices and how many candidates advance.
+
+<br>
 
 ## Features
 
@@ -31,7 +39,9 @@ The binding constraint is cost. A naive implementation calls an LLM once per mar
 - **Cost accounting** — every API call logs tokens, latency and USD cost to SQLite, queryable per day and per trade.
 - **Telegram control** — signal alerts plus `/status`, `/history`, `/pause`, `/resume`, `/costs`.
 - **Server-rendered dashboard** — FastAPI and Jinja2, no frontend framework: portfolio, signals, trade history, cost tracking.
-- **Fails closed** — malformed LLM responses and API errors resolve to "no signal", never to a trade on bad data.
+- **Parsing and limits** — JSON parse failures are handled, but schema, type and value validation is incomplete. Feed failures can leave reduced context while the scan loop continues; this is not a guarantee that every upstream failure halts analysis.
+
+<br>
 
 ## Screenshots
 
@@ -40,6 +50,9 @@ The binding constraint is cost. A naive implementation calls an LLM once per mar
 **Portfolio overview** — value, daily PnL, open positions and a seven-day breakdown.
 
 ![Dashboard overview](docs/screenshots/dashboard-overview.png)
+
+<details>
+<summary>More product screens and details</summary>
 
 **Signal feed** — each verdict with edge, confidence, the model's probability estimate, its reasoning and key factors. Markets the Tier 1 filter rejected appear without a verdict, so the filtering itself stays auditable.
 
@@ -72,6 +85,10 @@ Reasoning: CPI printed 2.1% against 2.4% consensus, and two governors
 shifted dovish this week. Bond futures moved before this market did.
 ```
 
+</details>
+
+<br>
+
 ## Tech stack
 
 | Layer | Choice | Rationale |
@@ -85,6 +102,8 @@ shifted dovish this week. Bond futures moved before this market did.
 | Dashboard | FastAPI + Jinja2 + Tailwind (CDN) | Server-rendered, no build step |
 | Logging | `structlog` | Structured output, greppable by event name |
 | Tooling | `ruff`, `pytest`, GitHub Actions | Lint, format and test on 3.11 and 3.12 |
+
+<br>
 
 ## Architecture
 
@@ -134,6 +153,8 @@ flowchart TD
 
 The scan loop runs every 5 minutes. Feeds run as independent background tasks — if the Binance socket drops or a feed returns 500s, context quality degrades but the loop continues. Open paper positions are settled each cycle against resolved markets.
 
+<br>
+
 ## Installation
 
 Requires Python 3.11 or newer.
@@ -171,6 +192,8 @@ cp .env.example .env               # then fill in your keys
 
 Polymarket credentials appear in `.env.example` but are unused: market data comes from the public Gamma API, and no wallet is needed while live trading is disabled.
 
+<br>
+
 ## Usage
 
 ```bash
@@ -203,6 +226,8 @@ scan_cycle_complete          markets_scanned=40 next_scan_seconds=300
 
 Telegram commands: `/status` (portfolio and open positions), `/history` (recent trades), `/pause` and `/resume` (halt scanning), `/costs` (today's API spend).
 
+<br>
+
 ## Project layout
 
 ```
@@ -218,12 +243,16 @@ polyedge/
 └── main.py       orchestrator
 ```
 
+<br>
+
 ## Roadmap
 
 - [x] Phase 1 — data pipeline, two-tier analysis, risk management, paper trading
 - [ ] Phase 2 — live execution via the CLOB API, gated on two or more weeks of profitable paper trading
 - [ ] Backtesting against historical market resolutions
 - [ ] Calibration tracking: predicted probability versus realised outcome frequency
+
+<br>
 
 ## Disclaimer
 
@@ -233,6 +262,8 @@ polyedge/
 - Nothing here has been validated against real capital, and no claim is made that the strategy is profitable. LLM probability estimates are not calibrated forecasts.
 - Prediction markets are legally restricted in many jurisdictions, including for US persons on some venues. Check your local regulations before trading.
 - If you adapt this for live trading, you do so entirely at your own risk. The author accepts no liability for financial losses.
+
+<br>
 
 ## License
 
